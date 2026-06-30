@@ -3,16 +3,170 @@
 @font-face{font-family:'Josefin Sans';src:url('./fonts/JosefinSans-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
 @font-face{font-family:'Josefin Sans';src:url('./fonts/JosefinSans-Italic.ttf') format('truetype');font-weight:400;font-style:italic;font-display:swap;}
 @font-face{font-family:'Josefin Sans';src:url('./fonts/JosefinSans-Medium.ttf') format('truetype');font-weight:500;font-style:normal;font-display:swap;}
-@font-face{font-family:'Josefin Sans';src:url('./fonts/JosefinSans-MediumItalic.ttf') format('truetype');font-weight:500;font-style:italic;font-display:swap;}
 @font-face{font-family:'Josefin Sans';src:url('./fonts/JosefinSans-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap;}
-@font-face{font-family:'Josefin Sans';src:url('./fonts/JosefinSans-SemiBoldItalic.ttf') format('truetype');font-weight:600;font-style:italic;font-display:swap;}
 @font-face{font-family:'Josefin Sans';src:url('./fonts/JosefinSans-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap;}
-@font-face{font-family:'Josefin Sans';src:url('./fonts/JosefinSans-BoldItalic.ttf') format('truetype');font-weight:700;font-style:italic;font-display:swap;}
-html{scroll-behavior:smooth;}
-body{font-family:'Josefin Sans',sans-serif;}
-.thumb-info{max-height:0;opacity:0;overflow:hidden;transition:max-height .2s ease-in-out,opacity .2s ease-in-out;}
-.group:hover .thumb-info{max-height:220px;opacity:1;}
-.thumb-bar{transition:padding-top .2s ease-in-out,background .2s ease-in-out;}
-.group:hover .thumb-bar{padding-top:1.75rem;}
-::-webkit-scrollbar{width:10px;}
-::-webkit-scrollbar-thumb{background:#b9b9b9;border-radius:6px;}
+
+/* ── SPA LAYOUT ── */
+html,body{height:100%;margin:0;overflow:hidden;background:linear-gradient(to bottom,#EEEEEE 0%,#DDDDDD 9%,#CCCCCC 15%,#DDDDDD 31%,#CCCCCC 95%,#DDDDDD 97%,#EEEEEE 100%);}
+#spa-viewport{height:100%;overflow:hidden;position:relative;}
+#spa-track{position:relative;height:100%;}
+.spa-slide{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;pointer-events:none;z-index:0;}
+.slide-active{pointer-events:auto;z-index:1;}
+/* Only slide-main + footer fade during transitions */
+.slide-main,.spa-slide footer{opacity:.5;transition:opacity 125ms ease-in-out;}
+.slide-active .slide-main,.slide-active footer{opacity:1;}
+.slide-inner{min-height:100%;display:flex;flex-direction:column;font-family:'Josefin Sans',sans-serif;}
+.slide-main{flex:1;}
+.spa-slide::-webkit-scrollbar{width:8px;}
+.spa-slide::-webkit-scrollbar-thumb{background:#b9b9b9;border-radius:4px;}
+
+/* ── GRADIENTS ── */
+.bg-header{background:linear-gradient(to bottom,#EEEEEE 0%,#dddddd 60%,#CCCCCC 100%);}
+.bg-content{background:linear-gradient(to bottom,#CCCCCC 0%,#DDDDDD 20%,#CCCCCC 100%);}
+.bg-content-project{background:linear-gradient(to bottom,#CCCCCC 0%,#DDDDDD 5%,#CCCCCC 100%);}
+.bg-footer{background:linear-gradient(to bottom,#CCCCCC 0%,#dddddd 40%,#EEEEEE 100%);}
+
+/* ── NAV BUTTONS ── */
+.nav-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;color:#3F3F3F;font-weight:300;
+  border-radius:5.46px;
+  box-shadow:inset 0 0 0 1px #3F3F3F,1px 2px 6px rgba(0,0,0,.15);
+  transition:color 200ms ease-in-out,background 200ms ease-in-out,box-shadow 200ms ease-in-out;
+  cursor:pointer;text-decoration:none;border:none;
+}
+@media(min-width:1024px){.nav-btn{border-radius:6.3px;}}
+.nav-btn:hover{
+  color:#000;background:rgba(255,255,255,.30);
+  box-shadow:0 0 0 1px #000,2px 4px 10px rgba(0,0,0,.15);
+}
+.nav-btn-selected{
+  display:inline-flex;align-items:center;justify-content:center;
+  color:#000;background:transparent;box-shadow:none;font-weight:400;
+  cursor:default;pointer-events:none;border:none;border-radius:5.46px;
+}
+@media(min-width:1024px){.nav-btn-selected{border-radius:6.3px;}}
+
+/* ── LINKEDIN (same border/shadow as nav-btn) ── */
+.linkedin-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;
+  border-radius:5.46px;border:none;cursor:pointer;text-decoration:none;
+  box-shadow:inset 0 0 0 1px #3F3F3F,1px 2px 6px rgba(0,0,0,.15);
+  transition:background 200ms ease-in-out,box-shadow 200ms ease-in-out,filter 200ms ease-in-out;
+}
+@media(min-width:1024px){.linkedin-btn{border-radius:6.3px;}}
+.linkedin-btn:hover{
+  background:rgba(255,255,255,.30);
+  box-shadow:0 0 0 1px #000,2px 4px 10px rgba(0,0,0,.15);
+  filter:brightness(1.25);
+}
+
+/* ── BACK TO TOP ── */
+#backToTop{
+  background:transparent;color:#3F3F3F;
+  box-shadow:inset 0 0 0 1px #3F3F3F,1px 2px 6px rgba(0,0,0,.15);
+  transition:color 200ms ease-in-out,background 200ms ease-in-out,box-shadow 200ms ease-in-out;
+  border:none;cursor:pointer;
+}
+#backToTop:hover{
+  color:#000;background:rgba(255,255,255,.30);
+  box-shadow:0 0 0 1px #000,2px 4px 10px rgba(0,0,0,.15);
+}
+
+/* ── HERO LEDE TEXT ── */
+.lede{text-shadow:0 4px 15px rgba(0,0,0,.15);}
+
+/* ── PROJECT THUMBS ── */
+.project-thumb{
+  outline:1px solid #3f3f3f;
+  box-shadow:1px 2px 6px rgba(0,0,0,.15);
+  transition:outline 200ms ease-in-out,box-shadow 200ms ease-in-out;
+  border-radius:0.75rem;overflow:hidden;display:block;position:relative;
+}
+.project-thumb:hover{outline:1px solid #000;box-shadow:2px 4px 10px rgba(0,0,0,.15);}
+.wip-thumb{
+  background:rgba(167,167,167,.05);
+  outline:1px solid rgba(63,63,63,.3);
+  box-shadow:1px 2px 6px rgba(0,0,0,.15);border-radius:0.75rem;
+}
+
+/* ── THUMB OVERLAY ── */
+/* Default: overlay height ~19% of thumb (top:81%), title with equal pt/pb */
+.thumb-overlay{
+  position:absolute;left:0;right:0;bottom:0;
+  top:81%;
+  background:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,.5));
+  transition:top 200ms ease-in-out,background 200ms ease-in-out,justify-content 0ms;
+  padding:0.375rem 1rem;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+/* Hover: expand to 60% of thumb, more opaque, content centered vertically */
+.project-thumb:hover .thumb-overlay{
+  top:40%;
+  background:linear-gradient(to top,rgba(0,0,0,.90),rgba(0,0,0,.60));
+  justify-content:center;
+}
+
+/* Mobile only: default state — pull title down so it doesn't overflow above
+   the dark box, and center it vertically within the box */
+@media(max-width:639px){
+  .project-thumb:not(:hover) .thumb-overlay{
+    justify-content:center;
+    padding-top:0.45rem;
+    padding-bottom:0.05rem; /* pushed further down */
+  }
+}
+/* Desktop only: default state — nudge title up a touch from the very bottom */
+@media(min-width:640px){
+  .project-thumb:not(:hover) .thumb-overlay{
+    padding-bottom:0.5rem;
+  }
+}
+
+/* THUMB TITLE */
+.thumb-title{
+  color:#fff;text-align:center;
+  font-size:20.16px; /* mobile: +20% of 16.8 */
+  line-height:1.25;
+  padding:0;
+  transition:font-size 200ms ease-in-out;
+}
+@media(min-width:640px){.thumb-title{font-size:19.2px;}} /* desktop stays same */
+/* Hover: title grows +20% */
+.project-thumb:hover .thumb-title{font-size:24.192px;}
+@media(min-width:640px){.project-thumb:hover .thumb-title{font-size:23.04px;}}
+/* Hover, desktop (1024+): title +20% on top of the above */
+@media(min-width:1024px){.project-thumb:hover .thumb-title{font-size:27.648px;}}
+
+/* THUMB INFO (hover paragraphs) */
+.thumb-info{
+  max-height:0;overflow:hidden;opacity:0;margin-top:0.5rem;
+  transition:max-height 200ms ease-in-out,opacity 200ms ease-in-out,margin-top 200ms ease-in-out;
+}
+.project-thumb:hover .thumb-info{max-height:220px;opacity:1;margin-top:0.9rem;} /* gap +80% */
+.thumb-info p{font-style:italic;font-size:11px;color:#fff;text-align:center;line-height:1.5;}
+@media(min-width:1024px){.thumb-info p{font-size:13.2px;}} /* desktop +20% */
+/* Hover, desktop (1024+): body text +20% and spacing +30% on top of the above */
+@media(min-width:1024px){
+  .project-thumb:hover .thumb-info{margin-top:1.17rem;}
+  .project-thumb:hover .thumb-info p{font-size:15.84px;}
+}
+
+/* ── YOUTUBE LITE ── */
+.yt-lite{position:relative;background:#000;cursor:pointer;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;}
+.yt-lite img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.yt-play{position:absolute;width:68px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,0,0,.9);transition:background 200ms;}
+.yt-lite:hover .yt-play{background:#f00;}
+.yt-lite iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+
+/* ── LAZY VIDEO ── */
+video.lazy-video{display:block;width:100%;height:auto;}
+
+/* ── ZOOM MODAL ── */
+#zoom-modal{backdrop-filter:none;}
+#zoom-img{box-shadow:0 8px 32px rgba(0,0,0,.6);}
+
+/* ── SCROLLBAR ── */
+.spa-slide::-webkit-scrollbar{width:8px;}
+.spa-slide::-webkit-scrollbar-thumb{background:#b9b9b9;border-radius:4px;}
