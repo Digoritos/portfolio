@@ -78,9 +78,6 @@
       b.style.width=D?'108px':'84px'; b.style.height=D?'40px':'28px';
       const s=b.querySelector('span'); if(s){s.style.fontSize=D?'23px':'16.2px';s.style.fontWeight='300';}
     });
-    document.querySelectorAll('#cv-btn').forEach(b=>{ b.style.width=D?'79.2px':'55.8px'; b.style.height=D?'40px':'28px'; });
-    document.querySelectorAll('#cv-icon').forEach(i=>{ i.style.width=i.style.height=D?'16px':'10.8px'; });
-    document.querySelectorAll('#cv-span').forEach(s=>{ s.style.fontSize=D?'23px':'16.2px'; s.style.fontWeight='300'; });
     document.querySelectorAll('#li-btn').forEach(b=>{ b.style.width=b.style.height=D?'40px':'28px'; });
     document.querySelectorAll('#li-icon').forEach(i=>{ i.style.width=i.style.height=D?'30px':'20px'; });
   }
