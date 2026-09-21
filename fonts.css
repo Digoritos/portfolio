@@ -6,19 +6,13 @@
 @font-face{font-family:'Josefin Sans';src:url('./fonts/JosefinSans-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap;}
 @font-face{font-family:'Josefin Sans';src:url('./fonts/JosefinSans-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap;}
 
-/* ── SPA LAYOUT ── */
-html,body{height:100%;margin:0;overflow:hidden;background:linear-gradient(to bottom,#EEEEEE 0%,#DDDDDD 9%,#CCCCCC 15%,#DDDDDD 31%,#CCCCCC 95%,#DDDDDD 97%,#EEEEEE 100%);}
-#spa-viewport{height:100%;overflow:hidden;position:relative;}
-#spa-track{position:relative;height:100%;}
-.spa-slide{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;pointer-events:none;z-index:0;}
-.slide-active{pointer-events:auto;z-index:1;}
-/* Only slide-main + footer fade during transitions */
-.slide-main,.spa-slide footer{opacity:.5;transition:opacity 125ms ease-in-out;}
-.slide-active .slide-main,.slide-active footer{opacity:1;}
-.slide-inner{min-height:100%;display:flex;flex-direction:column;font-family:'Josefin Sans',sans-serif;}
+/* ── PAGE LAYOUT ── */
+html{scroll-behavior:smooth;}
+html,body{margin:0;background:linear-gradient(to bottom,#EEEEEE 0%,#DDDDDD 9%,#CCCCCC 15%,#DDDDDD 31%,#CCCCCC 95%,#DDDDDD 97%,#EEEEEE 100%);}
+.slide-inner{min-height:100vh;display:flex;flex-direction:column;font-family:'Josefin Sans',sans-serif;}
 .slide-main{flex:1;}
-.spa-slide::-webkit-scrollbar{width:8px;}
-.spa-slide::-webkit-scrollbar-thumb{background:#b9b9b9;border-radius:4px;}
+html::-webkit-scrollbar{width:8px;}
+html::-webkit-scrollbar-thumb{background:#b9b9b9;border-radius:4px;}
 
 /* ── GRADIENTS ── */
 .bg-header{background:linear-gradient(to bottom,#EEEEEE 0%,#dddddd 60%,#CCCCCC 100%);}
@@ -167,6 +161,3 @@ video.lazy-video{display:block;width:100%;height:auto;}
 #zoom-modal{backdrop-filter:none;}
 #zoom-img{box-shadow:0 8px 32px rgba(0,0,0,.6);}
 
-/* ── SCROLLBAR ── */
-.spa-slide::-webkit-scrollbar{width:8px;}
-.spa-slide::-webkit-scrollbar-thumb{background:#b9b9b9;border-radius:4px;}
