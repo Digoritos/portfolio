@@ -8,17 +8,38 @@
 
 /* ── PAGE LAYOUT ── */
 html{scroll-behavior:smooth;}
-html,body{margin:0;background:linear-gradient(to bottom,#EEEEEE 0%,#DDDDDD 9%,#CCCCCC 15%,#DDDDDD 31%,#CCCCCC 95%,#DDDDDD 97%,#EEEEEE 100%);}
+html,body{margin:0;background:#EEEEEE;}
 .slide-inner{min-height:100vh;display:flex;flex-direction:column;font-family:'Josefin Sans',sans-serif;}
-.slide-main{flex:1;}
+.slide-main{flex:1;background:#EEEEEE;}
 html::-webkit-scrollbar{width:8px;}
 html::-webkit-scrollbar-thumb{background:#b9b9b9;border-radius:4px;}
 
 /* ── GRADIENTS ── */
-.bg-header{background:linear-gradient(to bottom,#EEEEEE 0%,#dddddd 60%,#CCCCCC 100%);}
-.bg-content{background:linear-gradient(to bottom,#CCCCCC 0%,#DDDDDD 20%,#CCCCCC 100%);}
-.bg-content-project{background:linear-gradient(to bottom,#CCCCCC 0%,#DDDDDD 5%,#CCCCCC 100%);}
-.bg-footer{background:linear-gradient(to bottom,#CCCCCC 0%,#dddddd 40%,#EEEEEE 100%);}
+/* Fixed-size bands instead of %-of-container: every block gets its own light-at-top
+   fade into the flat mid tone, with a size in clamp()/vh so it stays put regardless
+   of how tall the page or the block itself is. Curve has extra stops that already
+   reach the flat tone before the band's edge, so there's no visible seam. */
+:root{
+  --grad-stops:#FFFFFF 0.0%, #F7F7F7 10.1%, #F2F2F2 20.2%, #EFEFEF 30.3%, #EEEEEE 40.4%, #EEEEEE 50.5%, #EEEEEE 100%;
+  --grad-cap:clamp(121px, 24.4vh, 352px);
+  --grad-cap-footer:clamp(36px, 7.2vh, 104px);
+}
+.bg-header{background:linear-gradient(to bottom, var(--grad-stops));}
+.bg-pulse,
+.bg-content-project{
+  background-color:#EEEEEE;
+  background-image:linear-gradient(to bottom, var(--grad-stops));
+  background-repeat:no-repeat;
+  background-position:top;
+  background-size:100% var(--grad-cap);
+}
+.bg-footer{
+  background-color:#EEEEEE;
+  background-image:linear-gradient(to bottom, var(--grad-stops));
+  background-repeat:no-repeat;
+  background-position:top;
+  background-size:100% var(--grad-cap-footer);
+}
 
 /* ── NAV BUTTONS ── */
 .nav-btn{

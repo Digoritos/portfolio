@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Comparativo de gradiente — atual vs. proposto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3F3F3F;
+    --ink-strong:#222;
+    --accent:#5052E3;
+    --band-min: 70px;
+    --band-vh: 12vh;
+    --band-max: 160px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;background:#F4F4F4;font-family:'Josefin Sans',sans-serif;color:var(--ink);}
+  body{padding:32px 20px 80px;}
+  .wrap{max-width:1000px;margin:0 auto;}
+  h1{font-size:26px;font-weight:600;color:var(--ink-strong);margin:0 0 6px;letter-spacing:.01em;}
+  .lede{font-style:italic;font-size:15px;line-height:1.6;max-width:640px;margin:0 0 28px;color:#555;}
+  .lede strong{color:var(--ink-strong);font-weight:600;font-style:normal;}
+
+  .controls{
+    background:#fff;border:1px solid #ddd;border-radius:12px;
+    padding:16px 20px;margin-bottom:28px;
+    display:flex;flex-wrap:wrap;align-items:center;gap:16px;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+  }
+  .controls label{font-size:13px;font-weight:600;color:var(--ink-strong);white-space:nowrap;}
+  .controls input[type=range]{flex:1;min-width:160px;accent-color:var(--accent);}
+  .readout{font-variant-numeric:tabular-nums;font-weight:600;color:var(--accent);min-width:64px;text-align:right;}
+  .presets{display:flex;gap:8px;}
+  .presets button{
+    font-family:inherit;font-size:12.5px;font-weight:400;color:var(--ink);
+    background:transparent;border:1px solid #999;border-radius:6px;
+    padding:6px 12px;cursor:pointer;transition:background .15s,color .15s;
+  }
+  .presets button:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+  .cols{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;}
+  .col{flex:1 1 380px;min-width:300px;}
+  .col h2{font-size:15px;font-weight:600;color:var(--ink-strong);margin:0 0 3px;}
+  .col p.desc{font-size:12.5px;font-style:italic;color:#666;margin:0 0 12px;line-height:1.5;}
+
+  .panel{
+    position:relative;overflow:hidden;
+    border-radius:10px;border:1px solid #bbb;
+    box-shadow:1px 3px 10px rgba(0,0,0,.12);
+    background:#EEEEEE;
+  }
+  .browser-chrome{
+    height:22px;background:#ddd;border-bottom:1px solid #ccc;
+    display:flex;align-items:center;gap:5px;padding:0 8px;
+  }
+  .browser-chrome span{width:7px;height:7px;border-radius:50%;background:#bbb;display:inline-block;}
+
+  .mini-header{
+    padding:14px 16px 10px;
+    background:linear-gradient(to bottom,#EEEEEE 0%,#dddddd 60%,#CCCCCC 100%);
+  }
+  .mini-header .name{font-size:12px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-strong);}
+  .mini-header .role{font-size:10px;font-style:italic;color:#555;margin-top:2px;}
+
+  .content-current{
+    position:relative;
+    background:linear-gradient(to bottom,#CCCCCC 0%,#DDDDDD 20%,#CCCCCC 100%);
+    transition:height .35s ease;
+  }
+  .content-fixed{
+    position:relative;
+    background-color:#CCCCCC;
+    background-image:
+      linear-gradient(to bottom,#CCCCCC 0%,#DDDDDD 100%),
+      linear-gradient(to top,#CCCCCC 0%,#DDDDDD 100%);
+    background-repeat:no-repeat,no-repeat;
+    background-position:top,bottom;
+    background-size:100% clamp(var(--band-min),var(--band-vh),var(--band-max)),
+                     100% clamp(var(--band-min),var(--band-vh),var(--band-max));
+    transition:height .35s ease;
+  }
+
+  .marker{
+    position:absolute;left:0;right:0;
+    border-top:1.5px dashed rgba(80,82,227,.75);
+    pointer-events:none;
+  }
+  .marker .tag{
+    position:absolute;right:8px;top:-9px;
+    background:var(--accent);color:#fff;
+    font-size:10px;font-weight:600;font-style:normal;
+    padding:2px 6px;border-radius:4px;
+    font-variant-numeric:tabular-nums;
+    box-shadow:0 1px 4px rgba(0,0,0,.2);
+  }
+
+  .mini-footer{
+    padding:10px;text-align:center;
+    background:linear-gradient(to bottom,#CCCCCC 0%,#dddddd 40%,#EEEEEE 100%);
+    font-size:10px;font-style:italic;color:#666;
+  }
+
+  .stat{
+    margin-top:10px;font-size:12px;color:#555;
+    display:flex;justify-content:space-between;
+    border-top:1px dashed #ccc;padding-top:8px;
+  }
+  .stat b{color:var(--ink-strong);font-variant-numeric:tabular-nums;}
+
+  .takeaway{
+    margin-top:32px;background:#fff;border:1px solid #ddd;border-radius:12px;
+    padding:18px 22px;box-shadow:0 2px 8px rgba(0,0,0,.05);
+  }
+  .takeaway h3{margin:0 0 8px;font-size:14px;font-weight:600;color:var(--ink-strong);}
+  .takeaway p{font-size:13px;line-height:1.6;margin:0 0 10px;color:#444;}
+  .takeaway code{
+    display:block;background:#f6f6f6;border:1px solid #e0e0e0;border-radius:8px;
+    padding:12px 14px;font-family:'SF Mono',Consolas,monospace;font-size:11.5px;
+    line-height:1.6;color:#333;white-space:pre;overflow-x:auto;font-style:normal;
+  }
+
+  @media(max-width:760px){
+    .cols{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Gradiente de fundo: % vs. bandas fixas</h1>
+  <p class="lede">Os dois painéis abaixo usam a <strong>mesma altura de conteúdo</strong> (arraste o slider ou use os presets pra simular uma página curta como a About e uma longa como a Work). Repare como a faixa mais clara do gradiente se move no painel da esquerda, e fica parada no da direita.</p>
+
+  <div class="controls">
+    <label for="heightSlider">Altura do conteúdo</label>
+    <input type="range" id="heightSlider" min="220" max="900" value="260" step="1">
+    <span class="readout"><span id="heightReadout">260</span>px</span>
+    <div class="presets">
+      <button data-h="260">Curta (About)</button>
+      <button data-h="620">Longa (Work)</button>
+    </div>
+  </div>
+
+  <div class="cols">
+    <div class="col">
+      <h2>Atual — gradiente em % do container</h2>
+      <p class="desc">linear-gradient(...,#DDDDDD 20%,...) — o pico claro fica sempre a 20% da altura, então sua posição em px muda conforme o conteúdo cresce.</p>
+      <div class="panel">
+        <div class="browser-chrome"><span></span><span></span><span></span></div>
+        <div class="mini-header">
+          <div class="name">Rodrigo Morelli Cavalcante</div>
+          <div class="role">Technical Game UI/UX Designer</div>
+        </div>
+        <div class="content-current" id="panelCurrent">
+          <div class="marker" id="markerCurrent"><span class="tag" id="tagCurrent">0px</span></div>
+        </div>
+        <div class="mini-footer">back to top</div>
+      </div>
+      <div class="stat">
+        <span>Pico do brilho a partir do topo</span>
+        <b id="statCurrent">52px</b>
+      </div>
+    </div>
+
+    <div class="col">
+      <h2>Proposto — bandas fixas (clamp + vh)</h2>
+      <p class="desc">background-size: 100% clamp(70px,12vh,160px) — a faixa de transição tem um tamanho ligado à tela, não ao conteúdo. O miolo é só cor sólida.</p>
+      <div class="panel">
+        <div class="browser-chrome"><span></span><span></span><span></span></div>
+        <div class="mini-header">
+          <div class="name">Rodrigo Morelli Cavalcante</div>
+          <div class="role">Technical Game UI/UX Designer</div>
+        </div>
+        <div class="content-fixed" id="panelFixed">
+          <div class="marker" id="markerFixed"><span class="tag" id="tagFixed">0px</span></div>
+        </div>
+        <div class="mini-footer">back to top</div>
+      </div>
+      <div class="stat">
+        <span>Pico do brilho a partir do topo</span>
+        <b id="statFixed">—</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <h3>O que isso mostra</h3>
+    <p>No painel da esquerda, o número no canto sobe junto com a altura do conteúdo — é exatamente o "esticar" que você viu entre a home (grade de projetos, mais alta) e a about (mais curta). No painel da direita, o número muda muito pouco (só reage ao redimensionar a janela do navegador, porque usa <code style="display:inline;padding:0 4px;">vh</code>) — a altura do conteúdo em si não afeta mais o tamanho da faixa.</p>
+    <p>CSS por trás do painel da direita, pronto pra quando quisermos aplicar no <code style="display:inline;padding:0 4px;">fonts.css</code>:</p>
+    <code>.slide-main{
+  background-color:#CCCCCC;
+  background-image:
+    linear-gradient(to bottom, #CCCCCC 0%, #DDDDDD 100%),
+    linear-gradient(to top,    #CCCCCC 0%, #DDDDDD 100%);
+  background-repeat:no-repeat, no-repeat;
+  background-position:top, bottom;
+  background-size:
+    100% clamp(70px, 12vh, 160px),
+    100% clamp(70px, 12vh, 160px);
+}</code>
+  </div>
+</div>
+
+<script>
+(function(){
+  const slider = document.getElementById('heightSlider');
+  const readout = document.getElementById('heightReadout');
+  const panelCurrent = document.getElementById('panelCurrent');
+  const panelFixed = document.getElementById('panelFixed');
+  const markerCurrent = document.getElementById('markerCurrent');
+  const markerFixed = document.getElementById('markerFixed');
+  const tagCurrent = document.getElementById('tagCurrent');
+  const tagFixed = document.getElementById('tagFixed');
+  const statCurrent = document.getElementById('statCurrent');
+  const statFixed = document.getElementById('statFixed');
+
+  function clampPx(){
+    // mirrors clamp(70px, 12vh, 160px) computed against the real viewport
+    const vh = window.innerHeight * 0.12;
+    return Math.min(160, Math.max(70, vh));
+  }
+
+  function update(){
+    const h = parseInt(slider.value, 10);
+    readout.textContent = h;
+    panelCurrent.style.height = h + 'px';
+    panelFixed.style.height = h + 'px';
+
+    const peakCurrent = Math.round(h * 0.20);
+    markerCurrent.style.top = peakCurrent + 'px';
+    tagCurrent.textContent = peakCurrent + 'px';
+    statCurrent.textContent = peakCurrent + 'px';
+
+    const peakFixed = Math.round(clampPx());
+    markerFixed.style.top = peakFixed + 'px';
+    tagFixed.textContent = peakFixed + 'px';
+    statFixed.textContent = peakFixed + 'px (fixo)';
+  }
+
+  slider.addEventListener('input', update);
+  window.addEventListener('resize', update);
+  document.querySelectorAll('.presets button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      slider.value = btn.dataset.h;
+      update();
+    });
+  });
+
+  update();
+})();
+</script>
+</body>
+</html>
