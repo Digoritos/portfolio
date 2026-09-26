@@ -143,6 +143,12 @@ html::-webkit-scrollbar-thumb{background:#b9b9b9;border-radius:4px;}
 .thumb-info p{font-style:italic;font-size:11px;color:#fff;text-align:center;line-height:1.5;}
 @media(min-width:1024px){.thumb-info p{font-size:13.2px;}}
 
+/* ── PROJECT CASE-STUDY IMAGES ── */
+.zoomable{
+  border-radius:8px;
+  box-shadow:0 8px 16px 5px rgba(0,0,0,.14);
+}
+
 /* ── YOUTUBE LITE ── */
 .yt-lite{position:relative;background:#000;cursor:pointer;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;}
 .yt-lite img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
